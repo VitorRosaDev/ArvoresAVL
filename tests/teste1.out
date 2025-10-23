@@ -1,0 +1,16 @@
+OK: inserido 45
+Árvore:
+└── 45
+OK: inserido 20
+Árvore:
+└── 45
+    └── 20
+OK: inserido 60
+Árvore:
+└── 45
+    ├── 20
+    └── 60
+Em-Ordem: 20 45 60
+Pré-Ordem: 45 20 60
+Pós-Ordem: 20 60 45
+Encerrado.
