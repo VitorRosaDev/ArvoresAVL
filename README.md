@@ -1,17 +1,3 @@
-Combinado. Um bom README.md é essencial.
-
-Baseado em tudo que fizemos, aqui está uma sugestão de README.md completa e profissional para o seu projeto. Ele explica o que é o projeto, as funcionalidades e, o mais importante, como compilar e executar (levando em conta os problemas de codificação que resolvemos).
-
-O que fazer
-
-    Na pasta raiz do seu projeto (AlgoritmosProgramacaoVitorRodriguesDaRosa), crie um novo arquivo chamado README.md.
-
-    Copie e cole o texto abaixo (começando de # Implementação de Árvore AVL) para dentro desse arquivo.
-
-    Salve o arquivo.
-
-Markdown
-
 # Implementação de Árvore AVL em Java
 
 Este projeto é uma implementação acadêmica de uma estrutura de dados de Árvore AVL (Adelson-Velskii e Landis) em Java.
