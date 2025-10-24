@@ -1,17 +1,3 @@
-Combinado. Um bom README.md é essencial.
-
-Baseado em tudo que fizemos, aqui está uma sugestão de README.md completa e profissional para o seu projeto. Ele explica o que é o projeto, as funcionalidades e, o mais importante, como compilar e executar (levando em conta os problemas de codificação que resolvemos).
-
-O que fazer
-
-    Na pasta raiz do seu projeto (AlgoritmosProgramacaoVitorRodriguesDaRosa), crie um novo arquivo chamado README.md.
-
-    Copie e cole o texto abaixo (começando de # Implementação de Árvore AVL) para dentro desse arquivo.
-
-    Salve o arquivo.
-
-Markdown
-
 # Implementação de Árvore AVL em Java
 
 Este projeto é uma implementação acadêmica de uma estrutura de dados de Árvore AVL (Adelson-Velskii e Landis) em Java.
@@ -30,7 +16,19 @@ O objetivo principal é demonstrar o funcionamento de uma árvore binária de bu
 
 O projeto está organizado da seguinte forma:
 
-/ ├── .gitignore (Ignora arquivos .class e de saída) ├── src/ │ ├── No.java (Define a estrutura do nó da árvore) │ ├── ArvoreAVL.java (Contém a lógica principal da AVL e suas operações) │ ├── Main.java (Controlador que lê comandos do terminal) │ └── Validador.java (Script de teste para validar os requisitos) └── tests/ ├── teste1.in (Caso de teste 1: Inserções e percursos) ├── teste1.out (Saída esperada para o teste 1) ├── teste2.in (Caso de teste 2: Busca (encontrada e não encontrada)) ├── teste2.out (Saída esperada para o teste 2) ├── teste3.in (Caso de teste 3: Duplicatas, remoção e inexistentes) └── teste3.out (Saída esperada para o teste 3)
+├── .gitignore (Ignora arquivos .class e de saída)
+├── src/
+    ├── No.java (Define a estrutura do nó da árvore)
+    ├── ArvoreAVL.java (Contém a lógica principal da AVL e suas operações)
+    ├── Main.java (Controlador que lê comandos do terminal)
+    └── Validador.java (Script de teste para validar os requisitos)
+└── tests/
+    ├── teste1.in (Caso de teste 1: Inserções e percursos)
+    ├── teste1.out (Saída esperada para o teste 1)
+    ├── teste2.in (Caso de teste 2: Busca (encontrada e não encontrada))
+    ├── teste2.out (Saída esperada para o teste 2)
+    ├── teste3.in (Caso de teste 3: Duplicatas, remoção e inexistentes)
+    └── teste3.out (Saída esperada para o teste 3)
 
 
 ## Como Compilar e Executar
