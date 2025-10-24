@@ -16,7 +16,19 @@ O objetivo principal é demonstrar o funcionamento de uma árvore binária de bu
 
 O projeto está organizado da seguinte forma:
 
-/ ├── .gitignore (Ignora arquivos .class e de saída) ├── src/ │ ├── No.java (Define a estrutura do nó da árvore) │ ├── ArvoreAVL.java (Contém a lógica principal da AVL e suas operações) │ ├── Main.java (Controlador que lê comandos do terminal) │ └── Validador.java (Script de teste para validar os requisitos) └── tests/ ├── teste1.in (Caso de teste 1: Inserções e percursos) ├── teste1.out (Saída esperada para o teste 1) ├── teste2.in (Caso de teste 2: Busca (encontrada e não encontrada)) ├── teste2.out (Saída esperada para o teste 2) ├── teste3.in (Caso de teste 3: Duplicatas, remoção e inexistentes) └── teste3.out (Saída esperada para o teste 3)
+├── .gitignore (Ignora arquivos .class e de saída)
+├── src/
+    ├── No.java (Define a estrutura do nó da árvore)
+    ├── ArvoreAVL.java (Contém a lógica principal da AVL e suas operações)
+    ├── Main.java (Controlador que lê comandos do terminal)
+    └── Validador.java (Script de teste para validar os requisitos)
+└── tests/
+    ├── teste1.in (Caso de teste 1: Inserções e percursos)
+    ├── teste1.out (Saída esperada para o teste 1)
+    ├── teste2.in (Caso de teste 2: Busca (encontrada e não encontrada))
+    ├── teste2.out (Saída esperada para o teste 2)
+    ├── teste3.in (Caso de teste 3: Duplicatas, remoção e inexistentes)
+    └── teste3.out (Saída esperada para o teste 3)
 
 
 ## Como Compilar e Executar
