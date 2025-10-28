@@ -64,22 +64,27 @@ Existem duas formas de compilar e executar o projeto:
 (Conforme arquivos na pasta `src/`)
 
 **Diagrama de Classes:**
+
 ![Diagrama de Classes](src/UML_Classes.png)
 
 **Fluxo de Inserção (Sequência):**
+
 ![Fluxo de Inserção](src/UML_SequenciaInsercao.png)
 
 **Fluxo de Busca (Sequência):**
+
 ![Fluxo de Busca](src/UML_SequenciaBusca.png)
 
 **Fluxo de Atividade (Inserção):**
+
 ![Atividade de Inserção](src/UML_InserçãoAVL.png)
 
 **Fluxo de Atividade (Remoção):**
-![Atividade de Remoção]
-(src/UML_RemoçãoAVL.png)
+
+![Atividade de Remoção](src/UML_RemoçãoAVL.png)
 
 **Fluxo de Estado (Fator de Balanceamento):**
+
 ![Estados de Balanceamento](src/UML_Estados.png)
 
 ## Autores
