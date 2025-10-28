@@ -76,7 +76,8 @@ Existem duas formas de compilar e executar o projeto:
 ![Atividade de Inserção](src/UML_InserçãoAVL.png)
 
 **Fluxo de Atividade (Remoção):**
-![Atividade de Remoção](src/UML_RemoçãoAVL.png)
+![Atividade de Remoção]
+(src/UML_RemoçãoAVL.png)
 
 **Fluxo de Estado (Fator de Balanceamento):**
 ![Estados de Balanceamento](src/UML_Estados.png)
