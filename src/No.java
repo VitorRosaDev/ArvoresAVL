@@ -1,3 +1,4 @@
+
 public class No {
     private int valor;       // dado armazenado
     private int altura;      // altura do nó
@@ -11,10 +12,13 @@ public class No {
 
     public int getValor() { return valor; }
     public void setValor(int valor) { this.valor = valor; }
+
     public int getAltura() { return altura; }
     public void setAltura(int altura) { this.altura = altura; }
+
     public No getEsquerda() { return esquerda; }
     public void setEsquerda(No esquerda) { this.esquerda = esquerda; }
+
     public No getDireita() { return direita; }
     public void setDireita(No direita) { this.direita = direita; }
 }

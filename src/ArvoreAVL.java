@@ -1,71 +1,66 @@
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ArvoreAVL {
     private No raiz;
 
-    // --- MÉTODOS PÚBLICOS OBRIGATÓRIOS ---
+    // ===================== MÉTODOS PÚBLICOS (contrato) =====================
 
-    /**
-     * Método público para inserir um valor.
-     * A verificação de duplicata é feita pelo Main.java (via contem(v)),
-     * então este método apenas insere.
-     */
-    public void inserir(int v) {
-        raiz = inserirRec(raiz, v);
-    }
-
-    /**
-     * Método público para remover um valor.
-     * A verificação de existência é feita pelo Main.java (via contem(v)),
-     * então este método apenas remove.
-     */
-    public void remover(int v) {
-        raiz = removerRec(raiz, v);
-    }
-
-    /**
-     * Busca um valor e imprime o caminho (obrigatório pelo contrato).
-     */
-    public boolean buscar(int v) {
+    // Método extra usado pelo Main. É permitido ter métodos públicos adicionais.
+    public boolean contem(int v) {
         No atual = raiz;
-        StringBuilder caminho = new StringBuilder();
-        boolean encontrado = false;
-
         while (atual != null) {
-            // Adiciona o valor ao caminho, com espaço se não for o primeiro
-            if (caminho.length() > 0) {
-                caminho.append(" ");
-            }
-            caminho.append(atual.getValor());
-
-            if (v == atual.getValor()) {
-                encontrado = true;
-                break; // Achou, para o laço
-            }
-
+            if (v == atual.getValor()) return true;
             if (v < atual.getValor()) {
                 atual = atual.getEsquerda();
             } else {
                 atual = atual.getDireita();
             }
         }
-
-        // Impressão obrigatória (Contrato Oficial)
-        System.out.println("Caminho: " + caminho.toString());
-        System.out.println("Encontrado: " + (encontrado ? "sim" : "não"));
-
-        return encontrado;
+        return false;
     }
 
-    /**
-     * Método público usado pelo Main para verificar duplicatas/existência.
-     */
-    public boolean contem(int v) {
-        return contemRec(raiz, v);
+    public void inserir(int v) {
+        raiz = inserirRec(raiz, v);
+    }
+
+    public void remover(int v) {
+        raiz = removerRec(raiz, v);
+    }
+
+    // buscar precisa:
+    // 1) imprimir "Caminho: X Y Z"
+    // 2) imprimir "Encontrado: sim" / "Encontrado: não"
+    // 3) retornar boolean
+    public boolean buscar(int v) {
+        StringBuilder caminho = new StringBuilder();
+        No atual = raiz;
+        boolean achou = false;
+
+        while (atual != null) {
+            if (caminho.length() > 0) caminho.append(" ");
+            caminho.append(atual.getValor());
+
+            if (v == atual.getValor()) {
+                achou = true;
+                break;
+            } else if (v < atual.getValor()) {
+                atual = atual.getEsquerda();
+            } else {
+                atual = atual.getDireita();
+            }
+        }
+
+        System.out.println("Caminho: " + caminho.toString());
+        System.out.println("Encontrado: " + (achou ? "sim" : "não"));
+        return achou;
     }
 
     public String percursoPreOrdem() {
         StringBuilder sb = new StringBuilder();
         pre(raiz, sb);
-        return sb.toString().trim(); // .trim() remove espaços extras no final
+        return sb.toString().trim();
     }
 
     public String percursoEmOrdem() {
@@ -80,299 +75,226 @@ public class ArvoreAVL {
         return sb.toString().trim();
     }
 
-    /**
-     * Método público que inicia a impressão da árvore (formato gabarito).
-     */
+    // Deve devolver SOMENTE o desenho da árvore (sem "Árvore:\n").
+    // O Main já imprime "Árvore:" antes.
     public String imprimirArvore() {
-        if (raiz == null) {
-            // Nota: O gabarito não testa árvore vazia, mas isso é uma boa prática.
-            // O teste3.out remove 40, deixando 60 e 20, não fica vazia.
-            // Vamos retornar uma string que não quebre o Validador.
-            return ""; // String vazia é mais seguro.
-        }
-        
         StringBuilder sb = new StringBuilder();
-        // Começa a impressão recursiva a partir da raiz
-        imprimirRec(raiz, "", sb); 
+        if (raiz == null) {
+            // se a árvore estiver vazia, os testes não mostram nada após "Árvore:"
+            return sb.toString();
+        }
+        // A raiz sempre começa com "└── "
+        desenharNo(sb, "", "└── ", raiz, true);
         return sb.toString();
     }
 
+    // ===================== MÉTODOS PRIVADOS AUXILIARES =====================
 
-    // --- MÉTODOS PRIVADOS OBRIGATÓRIOS (AUXILIARES) ---
-
-    /**
-     * Auxiliar recursivo para o contem(v).
-     */
-    private boolean contemRec(No no, int v) {
-        if (no == null) {
-            return false; // Chegou numa folha e não achou
-        }
-
-        if (v == no.getValor()) {
-            return true; // Achou
-        }
-
-        if (v < no.getValor()) {
-            return contemRec(no.getEsquerda(), v); // Procura à esquerda
-        } else {
-            return contemRec(no.getDireita(), v); // Procura à direita
-        }
-    }
-
-    /**
-     * Retorna a altura do nó. (altura(null) == 0)
-     */
     private int altura(No n) {
-        if (n == null) {
-            return 0;
-        }
-        return n.getAltura(); // Retorna o valor armazenado no nó
+        if (n == null) return 0;
+        return n.getAltura();
     }
 
-    /**
-     * Retorna o Fator de Balanceamento do nó (hE - hD).
-     */
+    private void atualizarAltura(No n) {
+        int hE = altura(n.getEsquerda());
+        int hD = altura(n.getDireita());
+        int maior = (hE > hD) ? hE : hD;
+        n.setAltura(maior + 1);
+    }
+
     private int fatorBalanceamento(No n) {
-        if (n == null) {
-            return 0;
-        }
+        if (n == null) return 0;
         return altura(n.getEsquerda()) - altura(n.getDireita());
     }
 
-    // --- ROTAÇÕES ---
-
-    /**
-     * Rotação Simples à Direita (Caso LL).
-     */
     private No rotacaoDireita(No y) {
+        //        y
+        //       /
+        //      x
         No x = y.getEsquerda();
-        No T2 = x.getDireita(); 
+        No T2 = x.getDireita();
 
-        // Realiza a rotação
+        // Rotação
         x.setDireita(y);
         y.setEsquerda(T2);
 
         // Atualiza alturas
-        y.setAltura(Math.max(altura(y.getEsquerda()), altura(y.getDireita())) + 1);
-        x.setAltura(Math.max(altura(x.getEsquerda()), altura(x.getDireita())) + 1);
+        atualizarAltura(y);
+        atualizarAltura(x);
 
-        return x; // Retorna a nova raiz
+        return x;
     }
 
-    /**
-     * Rotação Simples à Esquerda (Caso RR).
-     */
     private No rotacaoEsquerda(No x) {
+        //      x
+        //       \
+        //        y
         No y = x.getDireita();
-        No T2 = y.getEsquerda(); 
+        No T2 = y.getEsquerda();
 
-        // Realiza a rotação
+        // Rotação
         y.setEsquerda(x);
         x.setDireita(T2);
 
         // Atualiza alturas
-        x.setAltura(Math.max(altura(x.getEsquerda()), altura(x.getDireita())) + 1);
-        y.setAltura(Math.max(altura(y.getEsquerda()), altura(y.getDireita())) + 1);
+        atualizarAltura(x);
+        atualizarAltura(y);
 
-        return y; // Retorna a nova raiz
+        return y;
     }
 
-    // --- RECURSIVOS DE INSERÇÃO/REMOÇÃO ---
+    private No balancear(No n) {
+        if (n == null) return null;
 
-    private No inserirRec(No no, int v) {
-        // 1. Inserção normal de BST
-        if (no == null) {
-            return (new No(v)); // Nó criado com altura 1 (ver No.java)
+        atualizarAltura(n);
+        int fb = fatorBalanceamento(n);
+
+        // Caso LL: fb > 1 e FB(esquerda) >= 0
+        if (fb > 1 && fatorBalanceamento(n.getEsquerda()) >= 0) {
+            return rotacaoDireita(n);
         }
 
-        // 2. Tratar Duplicata (ignora, conforme Main.java)
-        if (v == no.getValor()) {
-            return no; 
+        // Caso LR: fb > 1 e FB(esquerda) < 0
+        if (fb > 1 && fatorBalanceamento(n.getEsquerda()) < 0) {
+            n.setEsquerda(rotacaoEsquerda(n.getEsquerda()));
+            return rotacaoDireita(n);
         }
 
-        // 3. Descida recursiva
-        if (v < no.getValor()) {
-            no.setEsquerda(inserirRec(no.getEsquerda(), v));
+        // Caso RR: fb < -1 e FB(direita) <= 0
+        if (fb < -1 && fatorBalanceamento(n.getDireita()) <= 0) {
+            return rotacaoEsquerda(n);
+        }
+
+        // Caso RL: fb < -1 e FB(direita) > 0
+        if (fb < -1 && fatorBalanceamento(n.getDireita()) > 0) {
+            n.setDireita(rotacaoDireita(n.getDireita()));
+            return rotacaoEsquerda(n);
+        }
+
+        return n;
+    }
+
+    // INSERÇÃO RECURSIVA AVL
+    private No inserirRec(No n, int v) {
+        if (n == null) {
+            return new No(v);
+        }
+
+        if (v < n.getValor()) {
+            n.setEsquerda(inserirRec(n.getEsquerda(), v));
+        } else if (v > n.getValor()) {
+            n.setDireita(inserirRec(n.getDireita(), v));
         } else {
-            no.setDireita(inserirRec(no.getDireita(), v));
+            // valor duplicado -> não insere novamente
+            return n;
         }
 
-        // 4. Atualiza a altura
-        no.setAltura(1 + Math.max(altura(no.getEsquerda()), altura(no.getDireita())));
-
-        // 5. Calcula o Fator de Balanceamento (FB)
-        int fb = fatorBalanceamento(no);
-
-        // 6. Rebalanceamento (4 casos)
-
-        // Caso LL (FB > 1 e novo nó à esquerda do filho esquerdo)
-        if (fb > 1 && v < no.getEsquerda().getValor()) {
-            return rotacaoDireita(no);
-        }
-
-        // Caso RR (FB < -1 e novo nó à direita do filho direito)
-        if (fb < -1 && v > no.getDireita().getValor()) {
-            return rotacaoEsquerda(no);
-        }
-
-        // Caso LR (FB > 1 e novo nó à direita do filho esquerdo)
-        if (fb > 1 && v > no.getEsquerda().getValor()) {
-            no.setEsquerda(rotacaoEsquerda(no.getEsquerda()));
-            return rotacaoDireita(no);
-        }
-
-        // Caso RL (FB < -1 e novo nó à esquerda do filho direito)
-        if (fb < -1 && v < no.getDireita().getValor()) {
-            no.setDireita(rotacaoDireita(no.getDireita()));
-            return rotacaoEsquerda(no);
-        }
-
-        return no; // Retorna o nó (balanceado)
+        return balancear(n);
     }
 
-    private No removerRec(No no, int v) {
-        // 1. Busca pelo nó (ou nó nulo)
-        if (no == null) {
-            return no; // Valor não encontrado
+    // REMOÇÃO RECURSIVA AVL
+    private No removerRec(No n, int v) {
+        if (n == null) {
+            return null;
         }
 
-        // 2. Descida recursiva
-        if (v < no.getValor()) {
-            no.setEsquerda(removerRec(no.getEsquerda(), v));
-        } else if (v > no.getValor()) {
-            no.setDireita(removerRec(no.getDireita(), v));
-        }
-        
-        // 3. Nó encontrado (v == no.getValor())
-        else {
-            // Caso 0 ou 1 Filho
-            if (no.getEsquerda() == null || no.getDireita() == null) {
-                No temp = (no.getEsquerda() != null) ? no.getEsquerda() : no.getDireita();
-                if (temp == null) { // 0 filhos
-                    no = null; 
-                } else { // 1 filho
-                    no = temp; 
+        if (v < n.getValor()) {
+            n.setEsquerda(removerRec(n.getEsquerda(), v));
+        } else if (v > n.getValor()) {
+            n.setDireita(removerRec(n.getDireita(), v));
+        } else {
+            // achou nó a remover
+            if (n.getEsquerda() == null || n.getDireita() == null) {
+                // 0 ou 1 filho
+                No temp = (n.getEsquerda() != null) ? n.getEsquerda() : n.getDireita();
+                if (temp == null) {
+                    // sem filhos
+                    n = null;
+                } else {
+                    // 1 filho: substitui pelo filho
+                    n = temp;
                 }
-            } 
-            // Caso 2 Filhos
-            else {
-                // Encontra o sucessor (menor da direita)
-                No sucessor = minValorNo(no.getDireita());
-                // Copia o valor
-                no.setValor(sucessor.getValor());
-                // Remove o sucessor (que agora é duplicado)
-                no.setDireita(removerRec(no.getDireita(), sucessor.getValor()));
+            } else {
+                // 2 filhos: pegar o sucessor in-order (menor da subárvore direita)
+                No sucessor = minValueNode(n.getDireita());
+                n.setValor(sucessor.getValor());
+                n.setDireita(removerRec(n.getDireita(), sucessor.getValor()));
             }
         }
 
-        // Se a árvore ficou vazia (só tinha 1 nó)
-        if (no == null) {
-            return no;
+        if (n == null) {
+            return null;
         }
 
-        // 4. Atualiza a altura
-        no.setAltura(1 + Math.max(altura(no.getEsquerda()), altura(no.getDireita())));
-
-        // 5. Calcula o Fator de Balanceamento
-        int fb = fatorBalanceamento(no);
-
-        // 6. Rebalanceamento (4 casos)
-
-        // Caso LL (FB > 1 e FB(filho esq) >= 0)
-        if (fb > 1 && fatorBalanceamento(no.getEsquerda()) >= 0) {
-            return rotacaoDireita(no);
-        }
-
-        // Caso LR (FB > 1 e FB(filho esq) < 0)
-        if (fb > 1 && fatorBalanceamento(no.getEsquerda()) < 0) {
-            no.setEsquerda(rotacaoEsquerda(no.getEsquerda()));
-            return rotacaoDireita(no);
-        }
-
-        // Caso RR (FB < -1 e FB(filho dir) <= 0)
-        if (fb < -1 && fatorBalanceamento(no.getDireita()) <= 0) {
-            return rotacaoEsquerda(no);
-        }
-
-        // Caso RL (FB < -1 e FB(filho dir) > 0)
-        if (fb < -1 && fatorBalanceamento(no.getDireita()) > 0) {
-            no.setDireita(rotacaoDireita(no.getDireita()));
-            return rotacaoEsquerda(no);
-        }
-
-        return no; // Retorna o nó (balanceado)
+        return balancear(n);
     }
 
-    /**
-     * Encontra o nó com o menor valor na subárvore (o sucessor).
-     */
-    private No minValorNo(No no) {
-        No atual = no;
+    private No minValueNode(No n) {
+        No atual = n;
         while (atual.getEsquerda() != null) {
             atual = atual.getEsquerda();
         }
         return atual;
     }
 
-    // --- RECURSIVOS DE PERCURSO ---
-
-    // Pré-Ordem: Raiz, Esquerda, Direita
+    // percursos
     private void pre(No n, StringBuilder sb) {
-        if (n != null) {
-            sb.append(n.getValor()).append(" "); // Visita a Raiz
-            pre(n.getEsquerda(), sb);           // Visita Esquerda
-            pre(n.getDireita(), sb);            // Visita Direita
-        }
+        if (n == null) return;
+        sb.append(n.getValor()).append(" ");
+        pre(n.getEsquerda(), sb);
+        pre(n.getDireita(), sb);
     }
 
-    // Em-Ordem: Esquerda, Raiz, Direita
     private void em(No n, StringBuilder sb) {
-        if (n != null) {
-            em(n.getEsquerda(), sb);            // Visita Esquerda
-            sb.append(n.getValor()).append(" "); // Visita a Raiz
-            em(n.getDireita(), sb);             // Visita Direita
-        }
+        if (n == null) return;
+        em(n.getEsquerda(), sb);
+        sb.append(n.getValor()).append(" ");
+        em(n.getDireita(), sb);
     }
 
-    // Pós-Ordem: Esquerda, Direita, Raiz
     private void pos(No n, StringBuilder sb) {
-        if (n != null) {
-            pos(n.getEsquerda(), sb);           // Visita Esquerda
-            pos(n.getDireita(), sb);            // Visita Direita
-            sb.append(n.getValor()).append(" "); // Visita a Raiz
-        }
+        if (n == null) return;
+        pos(n.getEsquerda(), sb);
+        pos(n.getDireita(), sb);
+        sb.append(n.getValor()).append(" ");
     }
 
-    // --- AUXILIAR DE IMPRESSÃO (Formato Gabarito) ---
+    // Impressão ASCII da árvore
+    //
+    // Deve gerar exatamente esse estilo (exemplo esperado):
+    //
+    // └── 50
+    //     ├── 30
+    //     └── 70
+    //         └── 65
+    //
+    // Observações:
+    // - A raiz usa "└── "
+    // - Cada nível adiciona 4 espaços "    "
+    // - Não imprimimos barras verticais "│"
+    // - Se só existe 1 filho, ele ainda vira "└── "
+    //
+    private void desenharNo(StringBuilder sb, String prefixo, String conector, No n, boolean isUltimo) {
+        sb.append(prefixo);
+        sb.append(conector);
+        sb.append(n.getValor()).append("\n");
 
-    /**
-     * Método recursivo para imprimir a árvore no formato "upright" (de pé).
-     */
-    private void imprimirRec(No no, String prefixo, StringBuilder sb) {
-        if (no == null) return;
+        // filhos existentes, na ordem: esquerda, direita
+        List<No> filhos = new ArrayList<No>();
+        if (n.getEsquerda() != null) filhos.add(n.getEsquerda());
+        if (n.getDireita() != null) filhos.add(n.getDireita());
 
-        // 1. Imprime o nó atual
-        if (prefixo.isEmpty()) {
-            sb.append("└── ").append(no.getValor()).append("\n");
-        } else {
-            String prefixoPai = prefixo.substring(0, prefixo.length() - 4);
-            sb.append(prefixoPai).append(prefixo.substring(prefixo.length() - 4)).append(no.getValor()).append("\n");
-        }
+        for (int i = 0; i < filhos.size(); i++) {
+            No filho = filhos.get(i);
+            boolean ultimoFilho = (i == filhos.size() - 1);
 
-        // 2. Prepara os prefixos para os filhos
-        String prefixoBaseFilhos = prefixo.isEmpty() ? "    " : prefixo.substring(0, prefixo.length() - 4) +"    ";
-        
-        // 3. Decide os "galhos" corretos
-        if (no.getEsquerda() != null && no.getDireita() != null) {
-            // Ambos os filhos
-            imprimirRec(no.getEsquerda(), prefixoBaseFilhos + "├── ", sb);
-            imprimirRec(no.getDireita(), prefixoBaseFilhos + "└── ", sb);
-        } else if (no.getEsquerda() != null) {
-            // Só filho da esquerda
-            imprimirRec(no.getEsquerda(), prefixoBaseFilhos + "└── ", sb);
-        } else if (no.getDireita() != null) {
-            // Só filho da direita
-            imprimirRec(no.getDireita(), prefixoBaseFilhos + "└── ", sb);
+            // Conforme os testes fornecidos, eles não mantêm linhas verticais.
+            // Então o prefixo seguinte é sempre + "    "
+            String novoPrefixo = prefixo + "    ";
+
+            String novoConector = ultimoFilho ? "└── " : "├── ";
+
+            desenharNo(sb, novoPrefixo, novoConector, filho, ultimoFilho);
         }
     }
 }

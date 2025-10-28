@@ -1,3 +1,4 @@
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.StandardCharsets;
@@ -152,7 +153,7 @@ public class Validador {
         return count >= min;
     }
 
-    private static boolean mustContainInOrder(String text, List<String> needles) {
+    private static boolean mustContainInOrder(String text, List <String> needles) {
         int idx = 0;
         for (String n : needles) {
             int found = text.indexOf(n, idx);
